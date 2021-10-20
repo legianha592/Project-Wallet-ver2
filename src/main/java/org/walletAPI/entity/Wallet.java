@@ -3,10 +3,9 @@ package org.walletAPI.entity;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "WALLET")
@@ -27,4 +26,10 @@ public class Wallet {
 
     @Column(name = "TOTAL_AMOUNT")
     private Double totalAmount;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> listRecord;
 }

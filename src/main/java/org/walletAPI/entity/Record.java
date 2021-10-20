@@ -3,9 +3,7 @@ package org.walletAPI.entity;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -30,4 +28,10 @@ public class Record {
 
     @Column(name = "AMOUNT")
     private Double amount;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Wallet wallet;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private TypeRecord typeRecord;
 }

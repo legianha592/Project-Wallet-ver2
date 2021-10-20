@@ -3,10 +3,9 @@ package org.walletAPI.entity;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "TYPE_RECORD")
@@ -27,4 +26,7 @@ public class TypeRecord {
 
     @Column(name = "IMAGE_URL")
     private String imageUrl;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "typeRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> listRecord;
 }
