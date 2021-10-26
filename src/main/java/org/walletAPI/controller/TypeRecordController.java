@@ -14,8 +14,12 @@ import org.walletAPI.entity.Message;
 import org.walletAPI.entity.TypeRecord;
 import org.walletAPI.message.FinalMessage;
 import org.walletAPI.request.typeRecord.CreateTypeRecordRequest;
+import org.walletAPI.request.typeRecord.DeleteTypeRecordRequest;
+import org.walletAPI.request.typeRecord.UpdateTypeRecordRequest;
 import org.walletAPI.response.typeRecord.CreateTypeRecordResponse;
+import org.walletAPI.response.typeRecord.DeleteTypeRecordResponse;
 import org.walletAPI.response.typeRecord.GetListTypeRecordResponse;
+import org.walletAPI.response.typeRecord.UpdateTypeRecordResponse;
 import org.walletAPI.service.TypeRecordService;
 
 import javax.validation.Valid;
@@ -72,12 +76,51 @@ public class TypeRecordController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity updateTypeRecord() {
-        return null;
+    public ResponseEntity updateTypeRecord(@RequestBody @Valid UpdateTypeRecordRequest updateTypeRecordRequest) {
+        try {
+            Optional<TypeRecord> findTypeRecord = typeRecordService.findByTypeRecordId(updateTypeRecordRequest.getTypeRecordId());
+            Message<UpdateTypeRecordResponse> message;
+
+            if (findTypeRecord.isPresent()) {
+                TypeRecord typeRecord = findTypeRecord.get();
+                typeRecord.setTypeRecordName(updateTypeRecordRequest.getTypeRecordName());
+                typeRecord.setImageUrl(updateTypeRecordRequest.getImageUrl());
+
+                typeRecordService.addTypeRecord(typeRecord);
+
+                message = new Message<>(FinalMessage.UPDATE_TYPE_RECORD_SUCCESS, new UpdateTypeRecordResponse(typeRecord));
+            } else {
+                message = new Message<>(FinalMessage.NO_TYPE_RECORD, null);
+            }
+
+            return new ResponseEntity(message, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteTypeRecord() {
-        return null;
+    public ResponseEntity deleteTypeRecord(@RequestBody @Valid DeleteTypeRecordRequest deleteTypeRecordRequest) {
+        try {
+            Optional<TypeRecord> findTypeRecord = typeRecordService.findByTypeRecordId(deleteTypeRecordRequest.getTypeRecordId());
+            Message<DeleteTypeRecordResponse> message;
+
+            if (findTypeRecord.isPresent()) {
+                TypeRecord typeRecord = findTypeRecord.get();
+                if (typeRecord.getListRecord().size() != 0) {
+                    message = new Message<>(FinalMessage.UNABLE_TO_DELETE_TYPE_RECORD, null);
+                } else {
+                    typeRecordService.deleteTypeRecord(typeRecord);
+
+                    message = new Message<>(FinalMessage.DELETE_TYPE_RECORD_SUCCESS, new DeleteTypeRecordResponse(deleteTypeRecordRequest.getTypeRecordId()));
+                }
+            } else {
+                message = new Message<>(FinalMessage.NO_TYPE_RECORD, null);
+            }
+
+            return new ResponseEntity(message, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

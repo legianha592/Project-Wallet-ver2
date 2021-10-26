@@ -21,7 +21,15 @@ public class TypeRecordService {
         return typeRecordRepository.findByTypeRecordName(typeRecordName);
     }
 
+    public Optional<TypeRecord> findByTypeRecordId(Long typeRecordId) {
+        return typeRecordRepository.findById(typeRecordId);
+    }
+
     public void addTypeRecord(TypeRecord typeRecord) {
         typeRecordRepository.save(typeRecord);
+    }
+
+    public void deleteTypeRecord(TypeRecord typeRecord) {
+        typeRecordRepository.delete(typeRecord);
     }
 }
