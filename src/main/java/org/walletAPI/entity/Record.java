@@ -20,6 +20,9 @@ public class Record {
     @Column(name = "MODIFIED_DATE")
     private Date modifiedDate;
 
+    @Column(name = "RECORD_DATE")
+    private Date recordDate;
+
     @Column(name = "TITLE")
     private String title;
 

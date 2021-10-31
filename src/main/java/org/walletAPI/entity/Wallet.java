@@ -32,4 +32,8 @@ public class Wallet {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Record> listRecord;
+
+    public void addRecord(Record record) {
+        listRecord.add(record);
+    }
 }
