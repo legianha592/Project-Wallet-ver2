@@ -6,4 +6,10 @@ public class UserRequestValidation {
             throw new Exception("exception.password.not.equal.confirmPassword");
         }
     }
+
+    public static void checkPreviousPassword(String password, String previousPassword) throws Exception {
+        if (!password.equals(previousPassword)) {
+            throw new Exception("exception.password.not.equal.confirmPassword");
+        }
+    }
 }
